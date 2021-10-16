@@ -1,21 +1,24 @@
-name: Terraform Apply
+name: Terraform
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   terraform:
+    name: 'Terraform'
     runs-on: ubuntu-latest
 
     env:
-      ARM_CLIENT_ID: 'a79088e6-65c2-43a1-8438-155e540515d6'
+      ARM_CLIENT_ID: "a79088e6-65c2-43a1-8438-155e540515d6"
       ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
-      ARM_SUBSCRIPTION_ID: 'fefd6011-af8c-4269-8372-c5a7183d91d3'
-      ARM_TENANT_ID: '4dbda3f1-592e-4847-a01c-1671d0cc077f'
+      ARM_SUBSCRIPTION_ID: "fefd6011-af8c-4269-8372-c5a7183d91d3"
+      ARM_TENANT_ID: "4dbda3f1-592e-4847-a01c-1671d0cc077f"
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -28,4 +31,3 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-
