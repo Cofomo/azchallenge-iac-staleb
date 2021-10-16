@@ -118,3 +118,4 @@ resource "azurerm_sql_database" "sql_database" {
         environment = var.environment
     }
 }
+
