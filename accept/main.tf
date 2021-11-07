@@ -33,7 +33,7 @@ resource "azurerm_app_service" "app_service" {
 
 // Storage Account
 resource "azurerm_storage_account" "storage_account" {
-    name                     = "calicotstorageaccountaccept"
+    name                     = "calicotstorageaccountacc"
     resource_group_name      = var.resource-group-name
     location                 = var.location
     account_tier             = "Standard"
