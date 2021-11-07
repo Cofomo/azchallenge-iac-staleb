@@ -6,11 +6,11 @@ provider "azurerm" {
 
 // Web App
 resource "azurerm_app_service_plan" "service_plan" {
-    name = "calicot-service-plan"
-    location = var.location
+    name                = "calicot-service-plan-prod"
+    location            = var.location
     resource_group_name = var.resource-group-name
-    kind = "Windows"
-    reserved = false
+    kind                = "Windows"
+    reserved            = false
     sku {
         tier = "Shared"
         size = "D1"
@@ -21,7 +21,7 @@ resource "azurerm_app_service_plan" "service_plan" {
 }
 
 resource "azurerm_app_service" "app_service" {
-    name                = "calicot-app-service"
+    name                = "calicot-app-service-prod"
     location            = var.location
     resource_group_name = var.resource-group-name
     app_service_plan_id = azurerm_app_service_plan.service_plan.id
@@ -33,7 +33,7 @@ resource "azurerm_app_service" "app_service" {
 
 // Storage Account
 resource "azurerm_storage_account" "storage_account" {
-    name                     = "calicotstorageaccount"
+    name                     = "calicotstorageaccountprod"
     resource_group_name      = var.resource-group-name
     location                 = var.location
     account_tier             = "Standard"
@@ -47,7 +47,7 @@ resource "azurerm_storage_account" "storage_account" {
 
 // Azure Functions
 resource "azurerm_app_service_plan" "azure_functions_app_service" {
-    name                = "calicot-azure-functions-app-service"
+    name                = "calicot-azure-functions-app-service-prod"
     location            = var.location
     resource_group_name = var.resource-group-name
     kind                = "FunctionApp"
@@ -63,7 +63,7 @@ resource "azurerm_app_service_plan" "azure_functions_app_service" {
 }
 
 resource "azurerm_function_app" "function_app" {
-    name                       = "calicot-function-app"
+    name                       = "calicot-function-app-prod"
     location                   = var.location
     resource_group_name        = var.resource-group-name
     app_service_plan_id        = azurerm_app_service_plan.azure_functions_app_service.id
@@ -77,7 +77,7 @@ resource "azurerm_function_app" "function_app" {
 
 // Service Bus
 resource "azurerm_servicebus_namespace" "servicebus_namespace" {
-    name                = "calicot-servicebus-namespace"
+    name                = "calicot-servicebus-namespace-prod"
     location            = var.location
     resource_group_name = var.resource-group-name
     sku                 = "Basic"
@@ -88,14 +88,14 @@ resource "azurerm_servicebus_namespace" "servicebus_namespace" {
 }
 
 resource "azurerm_servicebus_queue" "servicebus_queue" {
-    name                = "calicot-servicebus"
+    name                = "calicot-servicebus-prod"
     resource_group_name = var.resource-group-name
     namespace_name      = azurerm_servicebus_namespace.servicebus_namespace.name
 }
 
 // SQL Database
 resource "azurerm_sql_server" "sql_server" {
-    name                         = "calicot-sql-server"
+    name                         = "calicot-sql-server-prod"
     resource_group_name          = var.resource-group-name
     location                     = var.location
     version                      = "12.0"
@@ -108,7 +108,7 @@ resource "azurerm_sql_server" "sql_server" {
 }
 
 resource "azurerm_sql_database" "sql_database" {
-    name                             = "calicot-sql-database"
+    name                             = "calicot-sql-database-prod"
     resource_group_name              = var.resource-group-name
     location                         = var.location
     server_name                      = azurerm_sql_server.sql_server.name
