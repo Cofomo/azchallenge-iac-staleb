@@ -6,15 +6,19 @@ on:
       - main
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  dev:
+    name: "Developpement"
     runs-on: ubuntu-latest
 
+    environment:
+      name: dev
+
     env:
-      ARM_CLIENT_ID: "a79088e6-65c2-43a1-8438-155e540515d6"
+      ARM_CLIENT_ID: ${{secrets.TF_ARM_CLIENT_ID}}
       ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
-      ARM_SUBSCRIPTION_ID: "fefd6011-af8c-4269-8372-c5a7183d91d3"
-      ARM_TENANT_ID: "4dbda3f1-592e-4847-a01c-1671d0cc077f"
+      ARM_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
+      ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
+      WORKING_DIRECTORY: ./dev
 
     steps:
       - name: Checkout
@@ -25,9 +29,80 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ${{env.WORKING_DIRECTORY}}
 
       - name: Terraform Plan
         run: terraform plan
+        working-directory: ${{env.WORKING_DIRECTORY}}
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
+        working-directory: ${{env.WORKING_DIRECTORY}}
+
+  accept:
+    name: "Acceptation"
+    runs-on: ubuntu-latest
+    needs: [dev]
+
+    environment:
+      name: accept
+
+    env:
+      ARM_CLIENT_ID: ${{secrets.TF_ARM_CLIENT_ID}}
+      ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
+      ARM_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
+      ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
+      WORKING_DIRECTORY: ./accept
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ${{env.WORKING_DIRECTORY}}
+
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ${{env.WORKING_DIRECTORY}}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ${{env.WORKING_DIRECTORY}}
+
+  prod:
+    name: "Production"
+    runs-on: ubuntu-latest
+    needs: [accept]
+
+    environment:
+      name: prod
+
+    env:
+      ARM_CLIENT_ID: ${{secrets.TF_ARM_CLIENT_ID}}
+      ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
+      ARM_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
+      ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
+      WORKING_DIRECTORY: ./prod
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ${{env.WORKING_DIRECTORY}}
+
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ${{env.WORKING_DIRECTORY}}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ${{env.WORKING_DIRECTORY}}
