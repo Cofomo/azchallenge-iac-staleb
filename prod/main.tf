@@ -12,8 +12,8 @@ resource "azurerm_app_service_plan" "service_plan" {
     kind = "Windows"
     reserved = false
     sku {
-        tier = "Free"
-        size = "F1"
+        tier = "Shared"
+        size = "D1"
     }
     tags = {
         environment = var.environment
