@@ -97,12 +97,12 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ${{env.WORKING_DIRECTORY}}
+        working-directory: ${{env.WORKING_DIRECTORY}}/code
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ${{env.WORKING_DIRECTORY}}
+        working-directory: ${{env.WORKING_DIRECTORY}}/code
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ${{env.WORKING_DIRECTORY}}
+        working-directory: ${{env.WORKING_DIRECTORY}}/code
