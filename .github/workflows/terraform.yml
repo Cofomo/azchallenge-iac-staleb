@@ -91,6 +91,12 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
       - name: Run tests
         run: ./Test.ps1
         shell: pwsh
@@ -133,8 +139,12 @@ jobs:
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
-        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
+
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
 
       - name: Run tests
         run: ./Test.ps1
