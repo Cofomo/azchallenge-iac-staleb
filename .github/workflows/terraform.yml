@@ -40,7 +40,7 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
-      - name: Run tests
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
         uses: azure/login@v1
         with:
           client-id: ${{secrets.TF_ARM_CLIENT_ID}}
@@ -48,6 +48,8 @@ jobs:
           tenant-id: ${{secrets.TF_ARM_TENANT_ID}}
           subscription-id: ${{secrets.TF_ARM_SUBSCRIPTION_ID}} 
           enable-AzPSSession: true
+
+      - name: Run tests
         run: ./Test.ps1
         shell: pwsh
         working-directory: ${{env.WORKING_DIRECTORY_TESTS}}
