@@ -41,13 +41,13 @@ jobs:
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
       - name: Run tests
-        run: ./build.ps1
+        run: ./Test.ps1
         shell: pwsh
         working-directory: ${{env.WORKING_DIRECTORY_TESTS}}
 
       - name: Terraform Destroy
         if: failure() || always()
-        run: terraform destroy
+        run: terraform destroy -auto-approve
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
   accept:
@@ -86,13 +86,13 @@ jobs:
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
       - name: Run tests
-        run: ./build.ps1
+        run: ./Test.ps1
         shell: pwsh
         working-directory: ${{env.WORKING_DIRECTORY_TESTS}}
 
       - name: Terraform Destroy
         if: failure() || always()
-        run: terraform destroy
+        run: terraform destroy -auto-approve
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
   prod:
@@ -131,11 +131,11 @@ jobs:
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
       - name: Run tests
-        run: ./build.ps1
+        run: ./Test.ps1
         shell: pwsh
         working-directory: ${{env.WORKING_DIRECTORY_TESTS}}
 
       - name: Terraform destroy
         if: failure() || always()
-        run: terraform destroy
+        run: terraform destroy -auto-approve
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
