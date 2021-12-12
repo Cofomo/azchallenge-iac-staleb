@@ -40,15 +40,16 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
+        - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+          uses: azure/login@v1
+          with:
+            client-id: ${{ env.ARM_CLIENT_ID }}
+            tenant-id: ${{ env.ARM_TENANT_ID }}
+            subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }} 
+            enable-AzPSSession: true
+                    
       - name: Run tests
-        run: |
-          $azureApplicationId = ${{secrets.TF_ARM_CLIENT_ID}}
-          $azureTenantId= ${{secrets.TF_ARM_TENANT_ID}}
-          $azurePassword = ConvertTo-SecureString ${{secrets.TF_ARM_CLIENT_SECRET}} -AsPlainText -Force
-          $psCred = New-Object System.Management.Automation.PSCredential($azureApplicationId , $azurePassword)
-          Connect-AzAccount -Credential $psCred -TenantId $azureTenantId -ServicePrincipal 
-          Set-AzContext -Subscription ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
-          ./Test.ps1
+        run: ./Test.ps1
         shell: pwsh
         working-directory: ${{env.WORKING_DIRECTORY_TESTS}}
 
