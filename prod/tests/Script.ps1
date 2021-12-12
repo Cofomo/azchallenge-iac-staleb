@@ -16,7 +16,7 @@ Describe "Verify resource creation" {
             Location        = 'Canada Central'
         }
         $storageAccountExpected = [PSCustomObject]@{
-            Name        = 'calicotstorageaccountprod'
+            Name        = 'calicotstorageaccountpro'
             AccountTier = 'Standard'
             AccessTier  = 'Hot'
             Location    = 'canadacentral'
