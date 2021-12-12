@@ -18,7 +18,8 @@ jobs:
       ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
       ARM_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
       ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
-      WORKING_DIRECTORY: ./dev
+      WORKING_DIRECTORY_CODE: ./dev/code
+      WORKING_DIRECTORY_TESTS: ./dev/tests
 
     steps:
       - name: Checkout
@@ -29,15 +30,25 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ${{env.WORKING_DIRECTORY}}
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ${{env.WORKING_DIRECTORY}}
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ${{env.WORKING_DIRECTORY}}
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
+
+      - name: Run tests
+        run: ./build.ps1
+        shell: pwsh
+        working-directory: ${{env.WORKING_DIRECTORY_TESTS}}
+
+      - name: Terraform Destroy
+        if: failure() || always()
+        run: terraform destroy
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
   accept:
     name: "Acceptation"
@@ -52,7 +63,8 @@ jobs:
       ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
       ARM_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
       ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
-      WORKING_DIRECTORY: ./accept
+      WORKING_DIRECTORY_CODE: ./accept/code
+      WORKING_DIRECTORY_TESTS: ./accept/tests
 
     steps:
       - name: Checkout
@@ -63,15 +75,25 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ${{env.WORKING_DIRECTORY}}
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ${{env.WORKING_DIRECTORY}}
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ${{env.WORKING_DIRECTORY}}
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
+
+      - name: Run tests
+        run: ./build.ps1
+        shell: pwsh
+        working-directory: ${{env.WORKING_DIRECTORY_TESTS}}
+
+      - name: Terraform Destroy
+        if: failure() || always()
+        run: terraform destroy
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
   prod:
     name: "Production"
@@ -86,7 +108,8 @@ jobs:
       ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
       ARM_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
       ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
-      WORKING_DIRECTORY: ./prod
+      WORKING_DIRECTORY_CODE: ./prod/code
+      WORKING_DIRECTORY_TESTS: ./prod/tests
 
     steps:
       - name: Checkout
@@ -97,12 +120,22 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ${{env.WORKING_DIRECTORY}}/code
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ${{env.WORKING_DIRECTORY}}/code
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        working-directory: ${{env.WORKING_DIRECTORY}}/code
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
+
+      - name: Run tests
+        run: ./build.ps1
+        shell: pwsh
+        working-directory: ${{env.WORKING_DIRECTORY_TESTS}}
+
+      - name: Terraform destroy
+        if: failure() || always()
+        run: terraform destroy
+        working-directory: ${{env.WORKING_DIRECTORY_CODE}}
