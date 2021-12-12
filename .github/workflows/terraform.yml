@@ -42,12 +42,12 @@ jobs:
 
       - name: Run tests
         run: |
-          $azureApplicationId = ${{ARM_CLIENT_ID}}
-          $azureTenantId= ${{ARM_TENANT_ID}}
-          $azurePassword = ConvertTo-SecureString ${{ARM_CLIENT_SECRET}} -AsPlainText -Force
+          $azureApplicationId = ${{env.ARM_CLIENT_ID}}
+          $azureTenantId= ${{env.ARM_TENANT_ID}}
+          $azurePassword = ConvertTo-SecureString ${{env.ARM_CLIENT_SECRET}} -AsPlainText -Force
           $psCred = New-Object System.Management.Automation.PSCredential($azureApplicationId , $azurePassword)
           Connect-AzAccount -Credential $psCred -TenantId $azureTenantId -ServicePrincipal 
-          Set-AzContext -Subscription ${{ARM_SUBSCRIPTION_ID}}
+          Set-AzContext -Subscription ${{env.ARM_SUBSCRIPTION_ID}}
           ./Test.ps1
         shell: pwsh
         working-directory: ${{env.WORKING_DIRECTORY_TESTS}}
