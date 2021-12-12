@@ -43,10 +43,7 @@ jobs:
       - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
         uses: azure/login@v1
         with:
-          client-id: ${{secrets.TF_ARM_CLIENT_ID}}
-          client-secret: ${{secrets.TF_ARM_CLIENT_SECRET}}
-          tenant-id: ${{secrets.TF_ARM_TENANT_ID}}
-          subscription-id: ${{secrets.TF_ARM_SUBSCRIPTION_ID}} 
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
       - name: Run tests
