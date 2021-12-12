@@ -40,14 +40,14 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: ${{env.WORKING_DIRECTORY_CODE}}
 
-        - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
-          uses: azure/login@v1
-          with:
-            client-id: ${{ env.ARM_CLIENT_ID }}
-            tenant-id: ${{ env.ARM_TENANT_ID }}
-            subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }} 
-            enable-AzPSSession: true
-                    
+      - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
+        uses: azure/login@v1
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }} 
+          enable-AzPSSession: true
+
       - name: Run tests
         run: ./Test.ps1
         shell: pwsh
