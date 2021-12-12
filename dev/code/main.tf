@@ -10,7 +10,7 @@ resource "azurerm_app_service_plan" "service_plan" {
     location            = var.location
     resource_group_name = var.resource-group-name
     kind                = "Windows"
-    reserved = false
+    reserved            = false
     sku {
         tier = "Shared"
         size = "D1"
